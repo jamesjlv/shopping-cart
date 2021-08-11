@@ -89,13 +89,16 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     }
   };
 
-  const removeProduct = async (productId: number) => {
+  const removeProduct = (productId: number) => {
     try {
-      const newCart = cart.filter((product) => product.id !== productId);
-
-      if (newCart.length <= 0) {
-        localStorage.setItem("@RocketShoes:cart", JSON.stringify(newCart));
-        setCart(newCart);
+      const updatedCart = [...cart];
+      const productIndex = updatedCart.findIndex(
+        (product) => product.id === productId
+      );
+      if (productIndex >= 0) {
+        updatedCart.splice(productIndex, 1);
+        setCart(updatedCart);
+        localStorage.setItem("@RocketShoes:cart", JSON.stringify(updatedCart));
       } else {
         throw Error();
       }
